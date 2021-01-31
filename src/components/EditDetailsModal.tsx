@@ -14,34 +14,34 @@ export const EditDetailsModal = ({ hideModal }: EditDetailsModalProps) => {
           <div className="flex justify-center bg-white p-8">
             <div>
               <h2 className="mb-8 text-2xl font-bold text-gray-900  leading-6">Change user details</h2>
-              <div className="flex flex-col mb-4">
+              <div className="flex flex-col mb-6">
                 <label className="mb-2 font-bold text-xl" htmlFor="name">
                   Name
                 </label>
                 <input
-                  className="py-2 px-3 w-full border rounded focus:outline-none focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
+                  className="py-2 px-3 w-full border  rounded shadow-md focus:outline-none focus:border-transparent focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
                   id="username"
                   type="text"
                   placeholder="Name"
                 ></input>
               </div>
-              <div className="flex flex-col mb-4">
+              <div className="flex flex-col mb-6">
                 <label className="text-xl font-bold mb-2" htmlFor="lastname">
                   Last name
                 </label>
                 <input
-                  className="py-2 px-3 w-full border rounded focus:outline-none focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
+                  className="py-2 px-3 w-full border rounded shadow-md focus:outline-none focus:border-transparent focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
                   id="lastname"
                   type="text"
                   placeholder="LastName"
                 ></input>
               </div>
-              <div className="flex flex-col mb-4 ">
+              <div className="flex flex-col mb-6">
                 <label className="text-xl font-bold mb-2" htmlFor="picture">
                   Picture URL
                 </label>
                 <input
-                  className="py-2 px-3 w-full border rounded focus:outline-none focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
+                  className="py-2 px-3 w-full border rounded shadow-md focus:outline-none focus:border-transparent focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
                   id="picture"
                   type="text"
                   placeholder="Picture URL"
