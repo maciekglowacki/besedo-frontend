@@ -6,9 +6,9 @@ import './tailwind.output.css';
 
 function App() {
   return (
-    <div className="flex flex-col h-screen font-mono ">
+    <div className="flex flex-col h-screen font-mono bg-pink-50 ">
       <Topbar />
-      <MainView />
+      <MainView  />
     </div>
   );
 }
