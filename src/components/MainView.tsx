@@ -6,19 +6,28 @@ import { UserTable } from './UserTable';
 
 export const MainView = () => {
   const [users, setUsers] = useState<Array<User>>([]);
-  const [isUsersLoading, setIsUsersLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   useEffect(() => {
     const getUsers = async () => {
-      const { data: users } = await axios.get<Array<User>>('http://localhost:8181/users');
-      setUsers(users);
-      setIsUsersLoading(false);
+      setIsLoading(true);
+      try {
+        const { data: users } = await axios.get<Array<User>>('http://localhost:8181/users');
+        setUsers(users);
+        setIsLoading(false);
+      } catch (e) {
+        setIsError(true);
+      }
     };
     getUsers();
   }, []);
 
   return (
     <div className="flex-auto mt-32 bg-pink-50">
-      {!isUsersLoading && (
+      {isError && <div className="text-center">Users cannot be displayed...</div>}
+      {isLoading ? (
+        <div className="loader h-64 w-64 border-8 border-t-8 m-auto ease-linear rounded-full  border-gray-200 "></div>
+      ) : (
         <>
           <UserManagement />
           <UserTable users={users} />

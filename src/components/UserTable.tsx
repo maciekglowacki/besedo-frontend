@@ -3,11 +3,10 @@ import { User } from '../types';
 type UserTableProps = {
   users: Array<User>;
 };
-
 export const UserTable = ({ users }: UserTableProps) => {
   return (
     <div className="flex items-center justify-center mb-8">
-      {users.length && (
+      {users.length !== 0 && (
         <table className=" shadow-lg bg-white">
           <thead>
             <tr>
