@@ -8,6 +8,11 @@ export const MainView = () => {
   const [users, setUsers] = useState<Array<User>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isModalActive, setIsModalActive] = useState(false);
+
+  const showModal = () => setIsModalActive(true);
+  const hideModal = () => setIsModalActive(false);
+
   useEffect(() => {
     const getUsers = async () => {
       setIsLoading(true);
@@ -30,7 +35,7 @@ export const MainView = () => {
       ) : (
         <>
           <UserManagement />
-          <UserTable users={users} />
+          <UserTable users={users} isModalActive={isModalActive} showModal={showModal} hideModal={hideModal} />
         </>
       )}
     </div>
