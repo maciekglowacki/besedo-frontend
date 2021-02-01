@@ -1,33 +1,28 @@
-import axios from 'axios';
 import { ChangeEvent, useState } from 'react';
 import { User } from '../types';
 
-export type EditDetailsModalProps = {
+export type UserDetailsModalProps = {
   hideModal: () => void;
   currentUser: User | null;
+  addUser: (user: User) => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
 };
 
 //could add debounce on inputs and validation on form inputs values
-export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalProps) => {
-  const [user, setUser] = useState<User | null>(currentUser);
+//also create separate modals for adding and updating users
+export const UserDetailsModal = ({ hideModal, currentUser, updateUser, addUser }: UserDetailsModalProps) => {
+  const [user, setUser] = useState<User | null>(currentUser ?? ({ name: { first: '', last: '' }, picture: '' } as User));
 
+
+  //could create separate onchanges for different properties
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const id = e.target.id;
-    if (value && id && user !== null) {
-      id === 'picture' ? setUser({ ...user, [id]: value }) : setUser({ ...user, name: { ...user.name, [id]: value } });
-    }
-  };
-
-  const onSubmit = (id: string) => {
-    const updateUser = async (id: string) => {
-      try {
-        await axios.put<User>(`http://localhost:8181/users/${id}`, user);
-      } catch (e) {
-        console.log(e);
+    if (value && id) {
+      if (user !== null) {
+        id === 'picture' ? setUser({ ...user, [id]: value }) : setUser({ ...user, name: { ...user.name, [id]: value } });
       }
-    };
-    updateUser(id);
+    }
   };
 
   return (
@@ -41,9 +36,13 @@ export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalPro
           className="inline-block align-middle max-w-lg w-full rounded-lg text-left overflow-hidden shadow-xl transform transition-all"
           role="dialog"
           onSubmit={() => {
-            if (user) {
-              const id = user.id;
-              onSubmit(id);
+            //does not look cool
+            if (user !== null) {
+              if (currentUser !== null) {
+                updateUser(user);
+              } else {
+                addUser(user);
+              }
             }
           }}
         >

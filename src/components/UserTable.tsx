@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { User } from '../types';
-import { EditDetailsModal } from './EditDetailsModal';
+import { UserDetailsModal } from './UserDetailsModal';
 
 type UserTableProps = {
   users: Array<User>;
@@ -8,8 +8,10 @@ type UserTableProps = {
   showModal: () => void;
   hideModal: () => void;
   removeUser: (id: string) => Promise<void>;
+  addUser: (user: User) => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
 };
-export const UserTable = ({ users, isModalActive, showModal, hideModal, removeUser }: UserTableProps) => {
+export const UserTable = ({ users, isModalActive, showModal, hideModal, removeUser, addUser, updateUser }: UserTableProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   return (
@@ -67,7 +69,7 @@ export const UserTable = ({ users, isModalActive, showModal, hideModal, removeUs
           </tbody>
         </table>
       )}
-      {isModalActive && <EditDetailsModal hideModal={hideModal} currentUser={currentUser} />}
+      {isModalActive && <UserDetailsModal hideModal={hideModal} currentUser={currentUser} addUser={addUser} updateUser={updateUser} />}
     </div>
   );
 };
