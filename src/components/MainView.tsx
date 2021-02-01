@@ -57,7 +57,11 @@ export const MainView = () => {
 
   return (
     <div className="flex-auto mt-32 bg-pink-50">
-      {isError && <div className="text-center">Users cannot be displayed...</div>}
+      {isError && (
+        <div className="text-center">
+          <p role="alert">Users cannot be displayed...</p>
+        </div>
+      )}
       {isLoading ? (
         <div className="loader h-64 w-64 border-8 border-t-8 m-auto ease-linear rounded-full  border-gray-200 "></div>
       ) : (
