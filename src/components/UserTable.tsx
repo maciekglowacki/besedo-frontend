@@ -9,6 +9,8 @@ type UserTableProps = {
   hideModal: () => void;
 };
 export const UserTable = ({ users, isModalActive, showModal, hideModal }: UserTableProps) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
   return (
     <div className="flex items-center justify-center mb-8">
       {users.length !== 0 && (
@@ -28,12 +30,19 @@ export const UserTable = ({ users, isModalActive, showModal, hideModal }: UserTa
                     {user.name.first} {user.name.last}
                   </td>
                   <td className="border px-16 py-6">
-                    <img src={user.picture} alt="user-picture" />
+                    <img src={user.picture} alt="user" />
                   </td>
                   <td className="border px-16 py-6 text-center">
                     <button
                       className="py-2 px-4 bg-pink-400 text-white rounded-lg shadow-md hover:bg-pink-600 focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-pink-300 focus:ring-opacity-75"
-                      onClick={showModal}
+                      data-id={user.id}
+                      onClick={(e) => {
+                        const target = e.target as HTMLButtonElement;
+                        const id = target.dataset.id;
+                        const currentUser = users.find((user) => user.id === id)!;
+                        id && setCurrentUser(currentUser);
+                        showModal();
+                      }}
                     >
                       Edit user
                     </button>
@@ -44,7 +53,7 @@ export const UserTable = ({ users, isModalActive, showModal, hideModal }: UserTa
           </tbody>
         </table>
       )}
-      {isModalActive && <EditDetailsModal hideModal={hideModal} />}
+      {isModalActive && <EditDetailsModal hideModal={hideModal} currentUser={currentUser} />}
     </div>
   );
 };

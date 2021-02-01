@@ -1,8 +1,11 @@
+import { User } from '../types';
+
 export type EditDetailsModalProps = {
   hideModal: () => void;
+  currentUser: User | null;
 };
 
-export const EditDetailsModal = ({ hideModal }: EditDetailsModalProps) => {
+export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalProps) => {
   return (
     <div className="fixed z-10 inset-0">
       <div className="block pt-4  px-4 pb-20  min-h-screen text-center">
@@ -23,6 +26,7 @@ export const EditDetailsModal = ({ hideModal }: EditDetailsModalProps) => {
                   id="username"
                   type="text"
                   placeholder="Name"
+                  defaultValue={currentUser?.name.first}
                 ></input>
               </div>
               <div className="flex flex-col mb-6">
@@ -34,6 +38,7 @@ export const EditDetailsModal = ({ hideModal }: EditDetailsModalProps) => {
                   id="lastname"
                   type="text"
                   placeholder="LastName"
+                  defaultValue={currentUser?.name.last}
                 ></input>
               </div>
               <div className="flex flex-col mb-6">
@@ -45,6 +50,7 @@ export const EditDetailsModal = ({ hideModal }: EditDetailsModalProps) => {
                   id="picture"
                   type="text"
                   placeholder="Picture URL"
+                  defaultValue={currentUser?.picture}
                 ></input>
               </div>
             </div>
