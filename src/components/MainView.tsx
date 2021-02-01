@@ -4,6 +4,7 @@ import { User } from '../types';
 import { UserManagement } from './UserManagement';
 import { UserTable } from './UserTable';
 
+//could move data fetching logic to user context
 export const MainView = () => {
   const [users, setUsers] = useState<Array<User>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,17 +14,27 @@ export const MainView = () => {
   const showModal = () => setIsModalActive(true);
   const hideModal = () => setIsModalActive(false);
 
+  const getUsers = async () => {
+    setIsLoading(true);
+    try {
+      const { data: users } = await axios.get<Array<User>>('http://localhost:8181/users');
+      setUsers(users);
+      setIsLoading(false);
+    } catch (e) {
+      setIsError(true);
+    }
+  };
+
+  const removeUser = async (id: string) => {
+    try {
+      await axios.delete(`http://localhost:8181/users/${id}`);
+      getUsers();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    const getUsers = async () => {
-      setIsLoading(true);
-      try {
-        const { data: users } = await axios.get<Array<User>>('http://localhost:8181/users');
-        setUsers(users);
-        setIsLoading(false);
-      } catch (e) {
-        setIsError(true);
-      }
-    };
     getUsers();
   }, []);
 
@@ -35,7 +46,7 @@ export const MainView = () => {
       ) : (
         <>
           <UserManagement />
-          <UserTable users={users} isModalActive={isModalActive} showModal={showModal} hideModal={hideModal} />
+          <UserTable users={users} isModalActive={isModalActive} showModal={showModal} hideModal={hideModal} removeUser={removeUser} />
         </>
       )}
     </div>

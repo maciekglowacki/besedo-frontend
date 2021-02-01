@@ -7,8 +7,9 @@ type UserTableProps = {
   isModalActive: boolean;
   showModal: () => void;
   hideModal: () => void;
+  removeUser: (id: string) => Promise<void>;
 };
-export const UserTable = ({ users, isModalActive, showModal, hideModal }: UserTableProps) => {
+export const UserTable = ({ users, isModalActive, showModal, hideModal, removeUser }: UserTableProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   return (
@@ -32,20 +33,33 @@ export const UserTable = ({ users, isModalActive, showModal, hideModal }: UserTa
                   <td className="border px-16 py-6">
                     <img src={user.picture} alt="user" />
                   </td>
-                  <td className="border px-16 py-6 text-center">
-                    <button
-                      className="py-2 px-4 bg-pink-400 text-white rounded-lg shadow-md hover:bg-pink-600 focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-pink-300 focus:ring-opacity-75"
-                      data-id={user.id}
-                      onClick={(e) => {
-                        const target = e.target as HTMLButtonElement;
-                        const id = target.dataset.id;
-                        const currentUser = users.find((user) => user.id === id)!;
-                        id && setCurrentUser(currentUser);
-                        showModal();
-                      }}
-                    >
-                      Edit user
-                    </button>
+                  <td className=" border px-16 py-6 text-center">
+                    <div className="inline-flex justify-end">
+                      <button
+                        className="py-2 px-4 bg-pink-400 text-white rounded-lg shadow-md hover:bg-pink-600 focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-pink-300 focus:ring-opacity-75"
+                        data-id={user.id}
+                        onClick={(e) => {
+                          const target = e.target as HTMLButtonElement;
+                          const id = target.dataset.id;
+                          const currentUser = users.find((user) => user.id === id)!;
+                          id && setCurrentUser(currentUser);
+                          showModal();
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="ml-8 py-2 px-4 bg-pink-700 text-white rounded-lg shadow-md hover:bg-pink-900 focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-pink-300 focus:ring-opacity-75"
+                        data-id={user.id}
+                        onClick={(e) => {
+                          const target = e.target as HTMLButtonElement;
+                          const id = target.dataset.id;
+                          id && removeUser(id);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );
