@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { ChangeEvent, useState } from 'react';
 import { User } from '../types';
 
 export type EditDetailsModalProps = {
@@ -5,7 +7,29 @@ export type EditDetailsModalProps = {
   currentUser: User | null;
 };
 
+//could add debounce on inputs and validation on form inputs values
 export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalProps) => {
+  const [user, setUser] = useState<User | null>(currentUser);
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const id = e.target.id;
+    if (value && id && user !== null) {
+      id === 'picture' ? setUser({ ...user, [id]: value }) : setUser({ ...user, name: { ...user.name, [id]: value } });
+    }
+  };
+
+  const onSubmit = (id: string) => {
+    const updateUser = async (id: string) => {
+      try {
+        await axios.put<User>(`http://localhost:8181/users/${id}`, user);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    updateUser(id);
+  };
+
   return (
     <div className="fixed z-10 inset-0">
       <div className="block pt-4  px-4 pb-20  min-h-screen text-center">
@@ -13,32 +37,43 @@ export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalPro
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <span className="inline-block align-middle h-screen"></span>
-        <div className="inline-block align-middle max-w-lg w-full rounded-lg text-left overflow-hidden shadow-xl transform transition-all" role="dialog">
+        <form
+          className="inline-block align-middle max-w-lg w-full rounded-lg text-left overflow-hidden shadow-xl transform transition-all"
+          role="dialog"
+          onSubmit={() => {
+            if (user) {
+              const id = user.id;
+              onSubmit(id);
+            }
+          }}
+        >
           <div className="flex justify-center bg-white p-8">
             <div>
               <h2 className="mb-8 text-2xl font-bold text-gray-900  leading-6">Change user details</h2>
               <div className="flex flex-col mb-6">
-                <label className="mb-2 font-bold text-xl" htmlFor="name">
+                <label className="mb-2 font-bold text-xl" htmlFor="first">
                   Name
                 </label>
                 <input
                   className="py-2 px-3 w-full border  rounded shadow-md focus:outline-none focus:border-transparent focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
-                  id="username"
+                  id="first"
                   type="text"
                   placeholder="Name"
                   defaultValue={currentUser?.name.first}
+                  onChange={onChange}
                 ></input>
               </div>
               <div className="flex flex-col mb-6">
-                <label className="text-xl font-bold mb-2" htmlFor="lastname">
+                <label className="text-xl font-bold mb-2" htmlFor="last">
                   Last name
                 </label>
                 <input
                   className="py-2 px-3 w-full border rounded shadow-md focus:outline-none focus:border-transparent focus:ring-2  focus:ring-pink-300  focus:ring-opacity-75"
-                  id="lastname"
+                  id="last"
                   type="text"
                   placeholder="LastName"
                   defaultValue={currentUser?.name.last}
+                  onChange={onChange}
                 ></input>
               </div>
               <div className="flex flex-col mb-6">
@@ -51,6 +86,7 @@ export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalPro
                   type="text"
                   placeholder="Picture URL"
                   defaultValue={currentUser?.picture}
+                  onChange={onChange}
                 ></input>
               </div>
             </div>
@@ -67,7 +103,7 @@ export const EditDetailsModal = ({ hideModal, currentUser }: EditDetailsModalPro
               Save
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
